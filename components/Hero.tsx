@@ -1,0 +1,101 @@
+'use client'
+
+import { useEffect, useRef, useState } from 'react'
+
+const BUTTON_TEXTS = [
+  'Посмотреть',
+  'чекнуть',
+  'чё, по чём?',
+  'скок стоит?',
+  'сколько денег?',
+  'чё по цене?',
+]
+
+export default function Hero() {
+  const videoRef = useRef<HTMLVideoElement>(null)
+  const [btnText, setBtnText] = useState('Посмотреть')
+  const [btnFade, setBtnFade] = useState(false)
+
+  useEffect(() => {
+    const video = videoRef.current
+    if (!video) return
+    video.play().catch(() => {
+      document.addEventListener('touchstart', () => video.play(), { once: true })
+    })
+  }, [])
+
+  useEffect(() => {
+    let current = 'Посмотреть'
+    const id = setInterval(() => {
+      setBtnFade(true)
+      setTimeout(() => {
+        let next: string
+        do {
+          next = BUTTON_TEXTS[Math.floor(Math.random() * BUTTON_TEXTS.length)]
+        } while (next === current)
+        current = next
+        setBtnText(next)
+        setBtnFade(false)
+      }, 200)
+    }, 2500)
+    return () => clearInterval(id)
+  }, [])
+
+  const scrollToCatalog = () => {
+    document.getElementById('catalog')?.scrollIntoView({ behavior: 'smooth' })
+  }
+
+  return (
+    <section
+      className="hero-bg w-full relative"
+      style={{ background: '#000', overflow: 'hidden' }}
+    >
+      <style>{`
+        .hero-bg {
+          aspect-ratio: 1 / 1;
+        }
+        @media (min-width: 768px) {
+          .hero-bg {
+            aspect-ratio: unset;
+            height: 80vh;
+            min-height: 500px;
+          }
+        }
+      `}</style>
+
+      <video
+        ref={videoRef}
+        className="hero-video"
+        autoPlay
+        muted
+        loop
+        playsInline
+      >
+        <source src="/images/фон 2.mp4" type="video/mp4" />
+      </video>
+
+      <div
+        className="absolute bottom-8 left-0 right-0 flex justify-center"
+        style={{ zIndex: 10 }}
+      >
+        <button
+          onClick={scrollToCatalog}
+          className="px-8 py-4 uppercase tracking-widest transition-all duration-200"
+          style={{
+            background: '#F29774',
+            color: '#A9342A',
+            fontFamily: "'ONDER', sans-serif",
+            fontSize: '0.75rem',
+            borderRadius: '5px',
+            opacity: btnFade ? 0.3 : 1,
+            transform: btnFade ? 'scale(0.95)' : 'scale(1)',
+            transition: 'opacity 0.2s, transform 0.2s',
+            minWidth: '160px',
+          }}
+        >
+          {btnText}
+        </button>
+      </div>
+    </section>
+  )
+}

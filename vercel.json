@@ -1,0 +1,10 @@
+{
+  "framework": "nextjs",
+  "buildCommand": "npm run build",
+  "outputDirectory": ".next",
+  "env": {
+    "WC_URL": "@wc_url",
+    "WC_CONSUMER_KEY": "@wc_consumer_key",
+    "WC_CONSUMER_SECRET": "@wc_consumer_secret"
+  }
+}
