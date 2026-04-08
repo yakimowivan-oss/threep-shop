@@ -5,7 +5,8 @@ const WC_KEY = process.env.WC_CONSUMER_KEY || ''
 const WC_SECRET = process.env.WC_CONSUMER_SECRET || ''
 
 function buildUrl(endpoint: string, params?: Record<string, string>) {
-  const url = new URL(`${WC_URL}/wp-json/wc/v3/${endpoint}`)
+  const url = new URL(`${WC_URL}/index.php`)
+  url.searchParams.set('rest_route', `/wc/v3/${endpoint}`)
   url.searchParams.set('consumer_key', WC_KEY)
   url.searchParams.set('consumer_secret', WC_SECRET)
   if (params) {
